@@ -2,6 +2,7 @@ package eu.inloop.viewmodel.sample.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import eu.inloop.viewmodel.base.ViewModelBaseFragment;
-import eu.inloop.viewmodel.binding.ViewModelBindingConfig;
 import eu.inloop.viewmodel.sample.R;
 import eu.inloop.viewmodel.sample.SampleApplication;
 import eu.inloop.viewmodel.sample.activity.SampleBindingActivity;
@@ -40,6 +40,8 @@ public class UserListFragment extends ViewModelBaseFragment<IUserListView, UserL
     Button mOpenBindingFragment;
 
     private ArrayAdapter<String> mAdapter;
+
+    private UserListViewModel mViewModel = new UserListViewModel();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,5 +124,11 @@ public class UserListFragment extends ViewModelBaseFragment<IUserListView, UserL
         // watch for memory leaks
         RefWatcher refWatcher = SampleApplication.getRefWatcher(getActivity());
         refWatcher.watch(this);
+    }
+
+    @NonNull
+    @Override
+    public UserListViewModel getViewModel() {
+        return mViewModel;
     }
 }

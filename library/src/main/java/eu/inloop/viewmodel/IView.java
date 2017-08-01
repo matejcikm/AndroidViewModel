@@ -1,6 +1,5 @@
 package eu.inloop.viewmodel;
 
-import android.app.Activity;
 import android.support.annotation.Nullable;
 
 import eu.inloop.viewmodel.base.ViewModelBaseActivity;
@@ -24,7 +23,7 @@ public interface IView {
 
     /**
      * Implement this method to remove the ViewModel associated with the Fragment or Activity.
-     * This is usually implemented by calling {@link ViewModelHelper#removeViewModel(Activity)},
+     * This is usually implemented by calling {@link ViewModelHelper#removeViewModel()},
      * see {@link ViewModelBaseActivity#removeViewModel()} and {@link ViewModelBaseFragment#removeViewModel()}.
      */
     void removeViewModel();

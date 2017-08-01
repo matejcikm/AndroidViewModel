@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 
-import eu.inloop.viewmodel.base.ViewModelBaseEmptyActivity;
 import eu.inloop.viewmodel.sample.R;
 import eu.inloop.viewmodel.sample.fragment.PagerFragment;
 import eu.inloop.viewmodel.support.ViewModelStatePagerAdapter;
 
-public class ViewPagerActivity extends ViewModelBaseEmptyActivity {
+public class ViewPagerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
