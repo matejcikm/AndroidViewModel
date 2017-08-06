@@ -1,25 +1,36 @@
-package eu.inloop.viewmodel.sample.viewmodel;
+package eu.inloop.viewmodel.sample.userlist;
 
+import android.annotation.SuppressLint;
+import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.inloop.viewmodel.AbstractViewModel;
-import eu.inloop.viewmodel.sample.viewmodel.view.IUserListView;
+import javax.inject.Inject;
 
-public class UserListViewModel extends AbstractViewModel<IUserListView> {
+import eu.inloop.viewmodel.AbstractViewModel;
+import eu.inloop.viewmodel.sample.injection.annotation.scope.PerScreen;
+
+@PerScreen
+public class UserListViewModel extends AbstractViewModel<UserListView> {
 
     private static final int TOTAL_USERS = 7;
     private List<String> mLoadedUsers;
 
-    //Don't persist state variables
-    private boolean mLoadingUsers;
-
     private float mCurrentLoadingProgress = 0;
+
+    public ObservableInt loadingVisibility = new ObservableInt(View.GONE);
+    public ObservableField<String> progressText = new ObservableField<>();
+
+    @Inject
+    public UserListViewModel() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle arguments, @Nullable Bundle savedInstanceState) {
@@ -32,23 +43,21 @@ public class UserListViewModel extends AbstractViewModel<IUserListView> {
     }
 
     @Override
-    public void onBindView(@NonNull IUserListView view) {
+    public void onBindView(@NonNull UserListView view) {
         super.onBindView(view);
 
         //downloading list of users
         if (mLoadedUsers != null) {
             view.showUsers(mLoadedUsers);
-        } else if (mLoadingUsers) {
-            view.showLoading(mCurrentLoadingProgress);
         } else {
             loadUsers();
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void loadUsers() {
-        mLoadingUsers = true;
         mCurrentLoadingProgress = 0;
-        getViewOptional().showLoading(mCurrentLoadingProgress);
+        loadingVisibility.set(View.VISIBLE);
         new AsyncTask<Void, Float, List<String>>() {
 
             @Override
@@ -72,49 +81,18 @@ public class UserListViewModel extends AbstractViewModel<IUserListView> {
             protected void onProgressUpdate(Float... values) {
                 super.onProgressUpdate(values);
                 mCurrentLoadingProgress = values[0];
-                getViewOptional().showLoading(mCurrentLoadingProgress);
+                progressText.set((int) (mCurrentLoadingProgress * 100) + "%");
             }
 
             @Override
             protected void onPostExecute(List<String> s) {
                 super.onPostExecute(s);
                 mLoadedUsers = s;
-                mLoadingUsers = false;
+                loadingVisibility.set(View.GONE);
                 getViewOptional().showUsers(s);
-                getViewOptional().hideProgress();
             }
         }.execute();
     }
-
-    public void deleteUser(final int position) {
-        if (position > mLoadedUsers.size() - 1) {
-            return;
-        }
-        mLoadedUsers.set(position, "Deleting in 5 seconds...");
-        getViewOptional().showUsers(mLoadedUsers);
-
-        final String itemToDelete = mLoadedUsers.get(position);
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                   //
-                }
-                mLoadedUsers.remove(itemToDelete);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                getViewOptional().showUsers(mLoadedUsers);
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
 
     @Override
     public void onSaveInstanceState(@NonNull final Bundle bundle) {

@@ -10,6 +10,7 @@
         <variable
             name="viewModel"
             type="eu.inloop.viewmodel.sample.userlist.UserListViewModel" />
+
     </data>
 
     <FrameLayout
@@ -42,13 +43,6 @@
                 android:text="@{viewModel.progressText}"/>
 
         </LinearLayout>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Activity"
-            android:layout_gravity="bottom"
-            android:onClick="@{() -> view.navigateToActivity()}"/>
 
     </FrameLayout>
 </layout>
