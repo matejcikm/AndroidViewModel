@@ -2,23 +2,15 @@ package eu.inloop.viewmodel;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-
-import eu.inloop.viewmodel.binding.ViewModelBindingConfig;
 
 public class ViewModelHelper<T extends IView, R extends AbstractViewModel<T>> {
 
     private R mViewModel;
-
-    @Nullable
-    private ViewDataBinding mBinding;
 
     private boolean mModelRemoved;
     private boolean mOnSaveInstanceCalled;
@@ -68,39 +60,6 @@ public class ViewModelHelper<T extends IView, R extends AbstractViewModel<T>> {
         mViewModel.onBindView(view);
     }
 
-    public void performBinding(@NonNull final IView bindingView) {
-        // skip if already create
-        if (mBinding != null) {
-            return;
-        }
-
-        // get ViewModelBinding config
-        final ViewModelBindingConfig viewModelConfig = bindingView.getViewModelBindingConfig();
-        // if fragment not providing ViewModelBindingConfig, do not perform binding operations
-        if (viewModelConfig == null) {
-            return;
-        }
-
-        // perform Data Binding initialization
-        final ViewDataBinding viewDataBinding;
-        if (bindingView instanceof Activity) {
-            viewDataBinding = DataBindingUtil.setContentView(((Activity) bindingView), viewModelConfig.getLayoutResource());
-        } else if (bindingView instanceof Fragment) {
-            viewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(viewModelConfig.getContext()), viewModelConfig.getLayoutResource(), null, false);
-        } else {
-            throw new IllegalArgumentException("View must be an instance of Activity or Fragment (support-v4).");
-        }
-
-        // bind all together
-        if (!viewDataBinding.setVariable(viewModelConfig.getViewModelVariableName(), getViewModel())) {
-            throw new IllegalArgumentException("Binding variable wasn't set successfully. Probably viewModelVariableName of your " +
-                    "ViewModelBindingConfig of " + bindingView.getClass().getSimpleName() + " doesn't match any variable in "
-                    + viewDataBinding.getClass().getSimpleName());
-        }
-
-        mBinding = viewDataBinding;
-    }
-
     /**
      * Use in case this model is associated with an {@link android.support.v4.app.Fragment}
      * Call from {@link android.support.v4.app.Fragment#onDestroyView()}. Use in case model is associated
@@ -117,7 +76,6 @@ public class ViewModelHelper<T extends IView, R extends AbstractViewModel<T>> {
         if (fragment.getActivity() != null && fragment.getActivity().isFinishing()) {
             removeViewModel();
         }
-        mBinding = null;
     }
 
     /**
@@ -141,7 +99,6 @@ public class ViewModelHelper<T extends IView, R extends AbstractViewModel<T>> {
             }
             removeViewModel();
         }
-        mBinding = null;
     }
 
     /**
@@ -159,7 +116,6 @@ public class ViewModelHelper<T extends IView, R extends AbstractViewModel<T>> {
         if (activity.isFinishing()) {
             removeViewModel();
         }
-        mBinding = null;
     }
 
     /**
@@ -183,7 +139,6 @@ public class ViewModelHelper<T extends IView, R extends AbstractViewModel<T>> {
         }
         mViewModel.onStart();
     }
-
 
     /**
      * Returns the current ViewModel instance associated with the Fragment or Activity.
@@ -215,16 +170,10 @@ public class ViewModelHelper<T extends IView, R extends AbstractViewModel<T>> {
         }
     }
 
-    @Nullable
-    public ViewDataBinding getBinding() {
-        return mBinding;
-    }
-
     public void removeViewModel() {
         if (mViewModel != null && !mModelRemoved) {
             mViewModel.onDestroy();
             mModelRemoved = true;
-            mBinding = null;
         }
     }
 }

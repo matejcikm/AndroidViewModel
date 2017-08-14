@@ -12,7 +12,6 @@ import eu.inloop.viewmodel.AbstractViewModel;
 import eu.inloop.viewmodel.BR;
 import eu.inloop.viewmodel.IView;
 import eu.inloop.viewmodel.ViewModelHelper;
-import eu.inloop.viewmodel.binding.ViewModelBindingConfig;
 
 public abstract class ViewModelBaseActivity<T extends IView, R extends AbstractViewModel<T>, B extends ViewDataBinding> extends AppCompatActivity implements IView  {
 
@@ -83,11 +82,5 @@ public abstract class ViewModelBaseActivity<T extends IView, R extends AbstractV
     @Override
     public void removeViewModel() {
         mViewModeHelper.removeViewModel();
-    }
-
-    @Nullable
-    @Override
-    public ViewModelBindingConfig getViewModelBindingConfig() {
-        return null;
     }
 }

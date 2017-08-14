@@ -1,10 +1,7 @@
 package eu.inloop.viewmodel;
 
-import android.support.annotation.Nullable;
-
 import eu.inloop.viewmodel.base.ViewModelBaseActivity;
 import eu.inloop.viewmodel.base.ViewModelBaseFragment;
-import eu.inloop.viewmodel.binding.ViewModelBindingConfig;
 
 /**
  * Any Activity or Fragment that needs a ViewModel needs to implement this interface.
@@ -12,15 +9,6 @@ import eu.inloop.viewmodel.binding.ViewModelBindingConfig;
  * {@link ViewModelBaseFragment} instead.
  */
 public interface IView {
-    /**
-     * This method is used for Data Binding to bind correct layout and variable automatically
-     * Can return null value in case that Data Binding is not used.
-     *
-     * @return defined ViewModelBinding Config for a specific screen.
-     */
-    @Nullable
-    ViewModelBindingConfig getViewModelBindingConfig();
-
     /**
      * Implement this method to remove the ViewModel associated with the Fragment or Activity.
      * This is usually implemented by calling {@link ViewModelHelper#removeViewModel()},
