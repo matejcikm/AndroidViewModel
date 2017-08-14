@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,7 @@ import eu.inloop.viewmodel.sample.userlist.UserListView;
 import eu.inloop.viewmodel.sample.userlist.UserListViewModel;
 import eu.inloop.viewmodel.sample.userlist.activity.UserListActivity;
 
-public class UserListFragment extends ComponentBaseFragment<UserListView, UserListViewModel, UserListComponent> implements UserListView {
+public class UserListFragment extends ComponentBaseFragment<UserListView, UserListViewModel, UserListComponent, FragmentUserlistBinding> implements UserListView {
 
     @Inject
     UserListAdapter mAdapter;
@@ -37,20 +36,14 @@ public class UserListFragment extends ComponentBaseFragment<UserListView, UserLi
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentUserlistBinding binding = FragmentUserlistBinding.inflate(inflater, container, false);
-        binding.setView(this); //TODO improve binding
-        binding.setViewModel(mViewModel);
-        binding.executePendingBindings();
-
-        binding.userListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.userListRecyclerView.setAdapter(mAdapter);
-        return binding.getRoot();
+    public FragmentUserlistBinding inflateBindingLayout(LayoutInflater layoutInflater, ViewGroup container) {
+        return FragmentUserlistBinding.inflate(layoutInflater, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getBinding().userListRecyclerView.setAdapter(mAdapter);
         setModelView(this);
     }
 

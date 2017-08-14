@@ -1,16 +1,15 @@
 package eu.inloop.viewmodel.sample.userlist.activity;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import eu.inloop.viewmodel.sample.R;
+import eu.inloop.viewmodel.sample.BR;
 import eu.inloop.viewmodel.sample.SampleApplication;
 import eu.inloop.viewmodel.sample.base.ComponentBaseActivity;
 import eu.inloop.viewmodel.sample.databinding.ActivityUserListBinding;
@@ -18,7 +17,7 @@ import eu.inloop.viewmodel.sample.userlist.UserListAdapter;
 import eu.inloop.viewmodel.sample.userlist.UserListView;
 import eu.inloop.viewmodel.sample.userlist.UserListViewModel;
 
-public class UserListActivity extends ComponentBaseActivity<UserListView, UserListViewModel, UserListActivtyComponent> implements UserListView {
+public class UserListActivity extends ComponentBaseActivity<UserListView, UserListViewModel, UserListActivtyComponent, ActivityUserListBinding> implements UserListView {
 
     @Inject
     UserListViewModel mViewModel;
@@ -27,15 +26,16 @@ public class UserListActivity extends ComponentBaseActivity<UserListView, UserLi
     UserListAdapter mAdapter;
 
     @Override
+    public ActivityUserListBinding inflateBindingLayout(LayoutInflater inflater) {
+        return ActivityUserListBinding.inflate(inflater);
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityUserListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_user_list);
-        binding.setView(this); //TODO improve binding
-        binding.setViewModel(mViewModel);
-        binding.executePendingBindings();
 
-        binding.userListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.userListRecyclerView.setAdapter(mAdapter);
+        getBinding().setVariable(BR.view, this);
+        getBinding().userListRecyclerView.setAdapter(mAdapter);
 
         setModelView(this);
     }

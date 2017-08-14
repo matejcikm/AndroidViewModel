@@ -1,20 +1,25 @@
 package eu.inloop.viewmodel.base;
 
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import eu.inloop.viewmodel.AbstractViewModel;
+import eu.inloop.viewmodel.BR;
 import eu.inloop.viewmodel.IView;
 import eu.inloop.viewmodel.ViewModelHelper;
 import eu.inloop.viewmodel.binding.ViewModelBindingConfig;
 
-public abstract class ViewModelBaseFragment<T extends IView, R extends AbstractViewModel<T>> extends Fragment implements IView {
+public abstract class ViewModelBaseFragment<T extends IView, R extends AbstractViewModel<T>, B extends ViewDataBinding> extends Fragment implements IView {
 
     private ViewModelHelper<T, R> mViewModelHelper;
+    private B mBinding;
 
     @CallSuper
     @Override
@@ -24,6 +29,17 @@ public abstract class ViewModelBaseFragment<T extends IView, R extends AbstractV
         mViewModelHelper = new ViewModelHelper<>(getViewModel());
 
         getViewModelHelper().onCreate(savedInstanceState, getArguments());
+    }
+
+    public abstract B inflateBindingLayout(LayoutInflater layoutInflater, ViewGroup container);
+
+    @CallSuper
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mBinding = inflateBindingLayout(inflater, container);
+        mBinding.setVariable(BR.view, this);
+        mBinding.setVariable(BR.viewModel, getViewModel());
+        return mBinding.getRoot();
     }
 
     @CallSuper
@@ -63,6 +79,10 @@ public abstract class ViewModelBaseFragment<T extends IView, R extends AbstractV
 
     @NonNull
     public abstract R getViewModel();
+
+    public B getBinding() {
+        return mBinding;
+    }
 
     @Nullable
     @Override

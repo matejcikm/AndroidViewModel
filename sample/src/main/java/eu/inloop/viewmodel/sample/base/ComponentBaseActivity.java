@@ -1,5 +1,6 @@
 package eu.inloop.viewmodel.sample.base;
 
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
@@ -10,7 +11,7 @@ import eu.inloop.viewmodel.base.ViewModelBaseActivity;
 import eu.inloop.viewmodel.sample.injection.ComponentsHolder;
 import eu.inloop.viewmodel.sample.injection.component.BaseActivityComponent;
 
-public abstract class ComponentBaseActivity<V extends IView, VM extends AbstractViewModel<V>, C extends BaseActivityComponent> extends ViewModelBaseActivity<V, VM> {
+public abstract class ComponentBaseActivity<V extends IView, VM extends AbstractViewModel<V>, C extends BaseActivityComponent, B extends ViewDataBinding> extends ViewModelBaseActivity<V, VM, B> {
 
     private ComponentsHolder mComponentsHolder;
 

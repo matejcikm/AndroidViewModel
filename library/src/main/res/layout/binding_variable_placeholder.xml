@@ -4,6 +4,10 @@
     <data>
 
         <variable
+            name="view"
+            type="boolean" />
+
+        <variable
             name="viewModel"
             type="boolean" />
     </data>

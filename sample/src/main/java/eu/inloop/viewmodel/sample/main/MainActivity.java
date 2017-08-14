@@ -2,19 +2,26 @@ package eu.inloop.viewmodel.sample.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
 
 import javax.inject.Inject;
 
 import eu.inloop.viewmodel.sample.R;
 import eu.inloop.viewmodel.sample.SampleApplication;
 import eu.inloop.viewmodel.sample.base.ComponentBaseActivity;
+import eu.inloop.viewmodel.sample.databinding.ActivityMainBinding;
 import eu.inloop.viewmodel.sample.userlist.fragment.UserListFragment;
 
 
-public class MainActivity extends ComponentBaseActivity<MainView, MainViewModel, MainActivityComponent> implements MainView {
+public class MainActivity extends ComponentBaseActivity<MainView, MainViewModel, MainActivityComponent, ActivityMainBinding> implements MainView {
 
     @Inject
     MainViewModel mViewModel;
+
+    @Override
+    public ActivityMainBinding inflateBindingLayout(LayoutInflater inflater) {
+        return ActivityMainBinding.inflate(inflater);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

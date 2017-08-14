@@ -1,5 +1,6 @@
 package eu.inloop.viewmodel.sample.base;
 
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -13,7 +14,7 @@ import eu.inloop.viewmodel.base.ViewModelBaseFragment;
 import eu.inloop.viewmodel.sample.injection.ComponentsHolder;
 import eu.inloop.viewmodel.sample.injection.component.BaseFragmentComponent;
 
-public abstract class ComponentBaseFragment<V extends IView, VM extends AbstractViewModel<V>, C extends BaseFragmentComponent> extends ViewModelBaseFragment<V, VM> {
+public abstract class ComponentBaseFragment<V extends IView, VM extends AbstractViewModel<V>, C extends BaseFragmentComponent, B extends ViewDataBinding> extends ViewModelBaseFragment<V, VM, B> {
     public static final String ARG_FRAGMENT_ID = "fragment_id";
 
     private String mFragmentId;
